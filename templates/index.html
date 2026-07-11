@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel de Pendências · SMT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <main class="card" id="card">
+      <header class="card__header">
+        <p class="eyebrow">SMT · CONSULTA DE PENDÊNCIAS</p>
+        <h1>Painel da distribuição</h1>
+      </header>
+
+      <!-- ESTADO 1: LOGIN -->
+      <section class="state state--login" id="stateLogin">
+        <p class="hint">
+          Use seu login do SMT. As unidades serão verificadas em uma única
+          consulta.
+        </p>
+
+        <form id="loginForm">
+          <label class="field">
+            <span>Usuário do SMT</span>
+            <input type="text" id="usuario" autocomplete="username" required />
+          </label>
+
+          <label class="field">
+            <span>Senha do SMT</span>
+            <input
+              type="password"
+              id="senha"
+              autocomplete="current-password"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span>Unidades a consultar</span>
+            <textarea
+              id="unidades"
+              rows="4"
+              placeholder="Uma unidade por linha. Ex:&#10;CDD PRESIDENTE PRUDENTE&#10;AC ADAMANTINA&#10;CDD MARILIA&#10;(vazio = todas visíveis ao login)"
+            ></textarea>
+            <small>Digite parte do nome de cada unidade, uma por linha</small>
+          </label>
+
+          <button type="submit" class="btn">Consultar pendências</button>
+        </form>
+      </section>
+
+      <!-- ESTADO 2: PROCESSANDO -->
+      <section class="state state--loading" id="stateLoading" hidden>
+        <div class="thinking">🤔</div>
+        <p class="loading-text">Consultando o SMT...</p>
+        <p class="loading-subtext" id="loadingDetail">
+          Aguarde, isso pode levar até um minuto
+        </p>
+      </section>
+
+      <!-- ESTADO 3: RESULTADO -->
+      <section class="state state--result" id="stateResult" hidden>
+        <div class="result-icon" id="resultIcon">✅</div>
+        <h2 class="result-title" id="resultTitle">Tudo certo</h2>
+        <p class="result-timestamp" id="resultTimestamp"></p>
+        <p class="result-unidades" id="resultUnidades"></p>
+
+        <div class="aviso-parcial" id="avisoParcial" hidden></div>
+
+        <div class="manifest" id="manifest" hidden>
+          <div class="manifest__head">
+            <span>Sit.</span>
+            <span>Seq / Objeto</span>
+            <span>Tempo</span>
+            <span>Unidade</span>
+          </div>
+          <div class="manifest__rows" id="manifestRows"></div>
+        </div>
+
+        <button class="btn btn--excel" id="exportarExcelBtn" hidden>
+          ⬇ Exportar Excel
+        </button>
+        <button class="btn btn--secondary" id="novaConsultaBtn">
+          Consultar novamente
+        </button>
+      </section>
+
+      <p class="error-box" id="errorBox" hidden></p>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

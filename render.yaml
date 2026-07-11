@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: smt-painel
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    envVars:
+      - key: WHATSAPP_HEADLESS
+        value: "true"
+      - key: ADMIN_TOKEN
+        generateValue: true
+    disk:
+      name: whatsapp-session-disk
+      mountPath: /app/whatsapp_session
+      sizeGB: 1
