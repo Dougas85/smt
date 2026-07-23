@@ -128,3 +128,37 @@ loginForm.addEventListener("submit", async (e) => {
     errorBox.textContent = err.message || "Falha na conexão durante a extração.";
   }
 });
+
+// Ação do botão Exportar para Excel
+exportarBtn.addEventListener("click", () => {
+  if (!dadosAtuais || dadosAtuais.length === 0) {
+    alert("Não há dados para exportar.");
+    return;
+  }
+
+  try {
+    // Organiza as colunas da planilha
+    const dadosExcel = dadosAtuais.map((item) => ({
+      "Sequência": item.seq,
+      "Objeto": item.objeto,
+      "Situação": item.situacao,
+      "Tempo": item.tempo,
+      "Unidade": item.unidade || ""
+    }));
+
+    // Cria a planilha Excel
+    const worksheet = XLSX.utils.json_to_sheet(dadosExcel);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Pendencias_SMT");
+
+    // Define o nome do arquivo com data e hora
+    const dataHora = new Date().toISOString().slice(0, 19).replace(/[-:]/g, "").replace("T", "_");
+    const nomeArquivo = `pendencias_smt_${dataHora}.xlsx`;
+
+    // Baixa o arquivo Excel no seu computador
+    XLSX.writeFile(workbook, nomeArquivo);
+  } catch (err) {
+    console.error("Erro ao gerar Excel:", err);
+    alert("Ocorreu um erro ao gerar o arquivo Excel.");
+  }
+});
