@@ -98,7 +98,7 @@
       <p class="error-box" id="errorBox" hidden></p>
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="{{ url_for('static', filename='xlsx.full.min.js') }}"></script>
     <script src="{{ url_for('static', filename='app.js') }}"></script>
   </body>
 </html>
