@@ -162,3 +162,18 @@ exportarBtn.addEventListener("click", () => {
     alert("Ocorreu um erro ao gerar o arquivo Excel.");
   }
 });
+
+// Ação do botão "Nova Consulta"
+novaConsultaBtn.addEventListener("click", () => {
+  // 1. Reseta as variáveis de dados em memória
+  dadosAtuais = [];
+  
+  // 2. Limpa o HTML das linhas da tabela e alertas
+  manifestRows.innerHTML = "";
+  manifest.hidden = true;
+  avisoParcial.hidden = true;
+  senhaInput.value = ""; // Limpa a senha por segurança
+
+  // 3. Volta para a tela inicial de formulário
+  mostrarEstado("login");
+});
