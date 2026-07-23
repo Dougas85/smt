@@ -98,7 +98,8 @@
       <p class="error-box" id="errorBox" hidden></p>
     </main>
 
-    <script src="{{ url_for('static', filename='xlsx.full.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <!-- JS carregado de forma assíncrona/deferida -->
+    <script src="{{ url_for('static', filename='xlsx.full.min.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
   </body>
 </html>
