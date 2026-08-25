@@ -7,6 +7,8 @@ const loginForm = document.getElementById("loginForm");
 const usuarioInput = document.getElementById("usuario");
 const senhaInput = document.getElementById("senha");
 const unidadesInput = document.getElementById("unidades");
+const dataInicioInput = document.getElementById("data_inicio");
+const dataFimInput = document.getElementById("data_fim");
 const loadingDetail = document.getElementById("loadingDetail");
 
 const resultIcon = document.getElementById("resultIcon");
@@ -52,6 +54,10 @@ loginForm.addEventListener("submit", async (e) => {
     .map((u) => u.trim())
     .filter((u) => u.length > 0);
 
+  // Captura os valores de data (usando fallback de string vazia ou null se não preenchido)
+  const data_inicio = dataInicioInput ? dataInicioInput.value.trim() : "";
+  const data_fim = dataFimInput ? dataFimInput.value.trim() : "";
+
   dadosAtuais = [];
   manifestRows.innerHTML = "";
   avisoParcial.hidden = true;
@@ -63,7 +69,7 @@ loginForm.addEventListener("submit", async (e) => {
     const response = await fetch("/api/consultar_stream", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ usuario, senha, unidades }),
+      body: JSON.stringify({ usuario, senha, unidades, data_inicio, data_fim }),
     });
 
     if (!response.ok) {
