@@ -182,16 +182,22 @@ def rodar_consulta_generator(usuario, senha, unidades=None, data_inicio=None, da
                 if botao_proxima.count() == 0 or botao_proxima.is_disabled():
                     break
 
+               # --- POR ESTE BLOCO ATUALIZADO ---
                 try:
-                    botao_proxima.click()
-                    page.wait_for_timeout(1000)
-                    pagina_atual += 1
-                except Exception as e:
-                    yield {
-                        "tipo": "alerta",
-                        "mensagem": f"Interrupção na navegação para página {pagina_atual + 1}: {str(e)}"
-                    }
-                    break
+                    # 1. Aguarda até 15s para o loader sumir completamente do DOM/tela
+                    try:
+                        page.locator("#loader").wait_for(state="hidden", timeout=15000)
+                    except Exception:
+                        pass # Se o loader não existir na DOM no momento, segue em frente
+                
+                    # 2. Tenta o clique normal do Playwright
+                    botao_proxima.click(timeout=5000)
+                except Exception:
+                    # 3. Fallback: Executa o clique direto via JS no browser ignorando o overlay/loader
+                    page.eval_on_selector(".Table__nextPageWrapper button", "btn => btn.click()")
+                
+                page.wait_for_timeout(1000)
+                pagina_atual += 1
 
             yield {"tipo": "fim", "status": "concluido"}
 
