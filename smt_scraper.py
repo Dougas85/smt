@@ -58,7 +58,22 @@ def selecionar_unidades(page, unidades):
                 pass
             log.warning("Unidade '%s' não selecionada: %s", unidade, e)
 
-def aplicar_filtro_situacao(page):
+def aplicar_filtro_situacao(page, data_inicio=None, data_fim=None):
+    # Preenche Data Início se for informada
+    if data_inicio:
+        campo_inicio = page.locator("#dataInicio")
+        campo_inicio.click()
+        campo_inicio.press("Control+A")  # Seleciona tudo (use "Meta+A" se for no macOS)
+        campo_inicio.fill(data_inicio)
+
+    # Preenche Data Fim se for informada
+    if data_fim:
+        campo_fim = page.locator("#dataFim")
+        campo_fim.click()
+        campo_fim.press("Control+A")
+        campo_fim.fill(data_fim)
+
+    # Filtros de Situação existentes
     for codigo in ["B", "R", "D", "E", "F"]:
         cb = page.locator(f"#situacao-{codigo}")
         if cb.count() > 0 and cb.is_checked():
@@ -70,8 +85,8 @@ def aplicar_filtro_situacao(page):
 
     page.click("text=Pesquisar")
     page.wait_for_load_state("networkidle", timeout=30000)
-
-def rodar_consulta_generator(usuario, senha, unidades=None, headless=True):
+    
+def rodar_consulta_generator(usuario, senha, unidades=None, data_inicio=None, data_fim=None headless=True):
     if unidades is None:
         unidades = []
 
@@ -83,7 +98,7 @@ def rodar_consulta_generator(usuario, senha, unidades=None, headless=True):
             login_smt(page, usuario, senha)
             abrir_painel_distribuicao(page)
             selecionar_unidades(page, unidades)
-            aplicar_filtro_situacao(page)
+            aplicar_filtro_situacao(page, data_inicio=data_inicio, data_fim=data_fim )
 
             pagina_atual = 1
             total_paginas = None
