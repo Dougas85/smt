@@ -51,6 +51,9 @@ def api_consultar_stream():
     usuario = (payload.get("usuario") or "").strip()
     senha = payload.get("senha") or ""
 
+    data_inicio = payload.get("data_inicio")
+    data_fim = payload.get("data_fim")
+
     unidades_raw = payload.get("unidades") or []
     if isinstance(unidades_raw, str):
         unidades_raw = [u.strip() for u in unidades_raw.split(",") if u.strip()]
@@ -61,7 +64,7 @@ def api_consultar_stream():
 
     def generate():
         try:
-            for evento in rodar_consulta_generator(usuario, senha, unidades=unidades, headless=CONSULTA_HEADLESS):
+            for evento in rodar_consulta_generator(usuario, senha, unidades=unidades, data_inicio=data_inicio, data_fim=data_fim,  headless=CONSULTA_HEADLESS):
                 yield f"data: {json.dumps(evento)}\n\n"
         except Exception as e:
             err_payload = {"tipo": "erro_fatal", "mensagem": f"Erro crítico durante a execução: {str(e)}"}
