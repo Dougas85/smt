@@ -86,7 +86,7 @@ def aplicar_filtro_situacao(page, data_inicio=None, data_fim=None):
     page.click("text=Pesquisar")
     page.wait_for_load_state("networkidle", timeout=30000)
     
-def rodar_consulta_generator(usuario, senha, unidades=None, data_inicio=None, data_fim=None headless=True):
+def rodar_consulta_generator(usuario, senha, unidades=None, data_inicio=None, data_fim=None, headless=True):
     if unidades is None:
         unidades = []
 
