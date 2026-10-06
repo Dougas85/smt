@@ -74,11 +74,11 @@ def aplicar_filtro_situacao(page, data_inicio=None, data_fim=None):
         campo_fim.fill(data_fim)
 
     # Filtros de Situação existentes
-    for codigo in ["B", "R", "D", "E", "F"]:
+    for codigo in ["B", "R", "E", "F"]:
         cb = page.locator(f"#situacao-{codigo}")
         if cb.count() > 0 and cb.is_checked():
             cb.uncheck()
-    for codigo in ["C", "I"]:
+    for codigo in ["C", "I", "D"]:
         cb = page.locator(f"#situacao-{codigo}")
         if cb.count() > 0 and not cb.is_checked():
             cb.check()
@@ -146,7 +146,7 @@ def rodar_consulta_generator(usuario, senha, unidades=None, data_inicio=None, da
                         objeto_codigo = celulas.nth(1).inner_text(timeout=2000).strip().split("\n")[0]
                         situacao_texto = celulas.nth(6).inner_text(timeout=2000).strip()
 
-                        if situacao_texto not in ("I", "C"):
+                        if situacao_texto not in ("I", "C", "D"):
                             continue
 
                         tempo_cel = celulas.nth(7).locator("div").first
